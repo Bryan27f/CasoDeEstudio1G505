@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Abstracciones.Interfaces.Reglas
 {
-    public interface IGeneroReglas
+    public interface IGeneroPeliculasReglas
     {
-        Task<List<Genero>> ObtenerGeneros();
+        Task<List<GeneroPelicula>> ObtenerGeneros();
     }
 }

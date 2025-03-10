@@ -9,27 +9,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//Autenticacion
-//var tokenConfiguration = builder.Configuration.GetSection("Toke").Get<TokenConfiguracion>();
-//var jwtIssuer = tokenConfiguration.Issuer;
-//var jwtAudience = tokenConfiguration.Audience;
-//var jwtKey = tokenConfiguration.key;
-
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = jwtIssuer,
-//            ValidAudience = jwtAudience,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-//        };
-//    });
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,8 +24,8 @@ builder.Services.AddHttpClient("ServicioGenero", client =>
 builder.Services.AddSingleton<IConfiguracion, Configuracion>();
 
 // Asegurarse de que GeneroServicio implementa IGeneroServicio
-builder.Services.AddScoped<IGeneroReglas, GeneroReglas>();
-builder.Services.AddScoped<IGeneroServicio, GeneroServicio>();
+builder.Services.AddScoped<IGeneroPeliculasReglas, GeneroPeliculaReglas>();
+builder.Services.AddScoped<IGeneroPeliculaServicio, GeneroPeliculaServicio>();
 
 var app = builder.Build();
 
