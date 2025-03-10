@@ -5,13 +5,13 @@ using Dapper;
 
 namespace DA
 {
-    public class GeneroDA : IGeneroDA
+    public class GeneroPeliculaDA : IGeneroPeliculaDA
     {
         private IRepositorioDapper _repositorioDapper;
         private SqlConnection _sqlConnection;
 
 
-        public GeneroDA(IRepositorioDapper repositorioDapper)
+        public GeneroPeliculaDA(IRepositorioDapper repositorioDapper)
         {
             _repositorioDapper = repositorioDapper;
             _sqlConnection = _repositorioDapper.ObtenerRepositorio();
@@ -19,10 +19,10 @@ namespace DA
 
         #region Operaciones
 
-        public async Task<IEnumerable<GeneroResponse>> Obtener()
+        public async Task<IEnumerable<GeneroPeliculaResponse>> Obtener()
         {
             string query = @"ObtenerVehiculos";
-            var resultadoConsulta = await  _sqlConnection.QueryAsync<GeneroResponse>(query);
+            var resultadoConsulta = await  _sqlConnection.QueryAsync<GeneroPeliculaResponse>(query);
             return resultadoConsulta;
         }
         #endregion

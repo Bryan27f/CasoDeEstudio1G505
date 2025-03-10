@@ -7,16 +7,16 @@ using Abstracciones.Interfaces.Servicios;
 
 [Route("api/[controller]")]
 [ApiController]
-public class GeneroController : ControllerBase
+public class GeneroPeliculaController : ControllerBase
 {
-    private readonly IGeneroServicio _generoServicio;
+    private readonly IGeneroPeliculaServicio _generoServicio;
 
-    public GeneroController(IGeneroServicio generoServicio)
+    public GeneroPeliculaController(IGeneroPeliculaServicio generoServicio)
     {
         _generoServicio = generoServicio;
     }
 
-    [HttpGet]
+    [HttpGet("ObtenerGenerosDePeliculas")]
     public async Task<IActionResult> ObtenerGeneros()
     {
         var generos = await _generoServicio.ObtenerGeneros();
