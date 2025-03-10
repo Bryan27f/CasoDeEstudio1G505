@@ -1,11 +1,34 @@
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Interfaces.Servicios;
+using Abstracciones.Modelos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Reglas;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//Autenticacion
+//var tokenConfiguration = builder.Configuration.GetSection("Toke").Get<TokenConfiguracion>();
+//var jwtIssuer = tokenConfiguration.Issuer;
+//var jwtAudience = tokenConfiguration.Audience;
+//var jwtKey = tokenConfiguration.key;
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuer = true,
+//            ValidateAudience = true,
+//            ValidateLifetime = true,
+//            ValidateIssuerSigningKey = true,
+//            ValidIssuer = jwtIssuer,
+//            ValidAudience = jwtAudience,
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+//        };
+//    });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

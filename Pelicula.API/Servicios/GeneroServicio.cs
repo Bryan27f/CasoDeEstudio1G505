@@ -1,55 +1,52 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using System.Text.Json;
-using Abstracciones.Modelos;
-using Abstracciones.Interfaces.Reglas;
+﻿using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Interfaces.Servicios;
-using System.Net.Http.Headers;
+using Abstracciones.Modelos;
+using System.Text.Json;
 
 
 public class GeneroServicio : IGeneroServicio
 {
     private readonly IConfiguracion _configuracion;
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpClientFactory _httpClient;
 
-    public GeneroServicio(IConfiguracion configuracion, IHttpClientFactory httpClientFactory)
+    public GeneroServicio(IConfiguracion configuracion, IHttpClientFactory httpClient)
     {
         _configuracion = configuracion;
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClient;
     }
 
     public async Task<List<Genero>> ObtenerGeneros()
     {
-        // Verificamos que la configuración está bien cargada
-        var urlBase = _configuracion.ObtenerMetodo("ApiEndPointsGenero", "UrlBase") ?? "";
-        var metodo = _configuracion.ObtenerMetodo("ApiEndPointsGenero", "ObtenerGeneros") ?? "";
+        var endpoint = _configuracion.ObtenerMetodo("ApiEndPointsGenero", "ObtenerGeneros");
+        var servicioGenero = _httpClient.CreateClient("ServicioGenero");
 
-        Console.WriteLine($"URL Base: {urlBase}");
-        Console.WriteLine($"Método: {metodo}");
+        var token = _configuracion.ObtenerValor("AuthToken");
+        servicioGenero.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-        if (string.IsNullOrWhiteSpace(urlBase) || string.IsNullOrWhiteSpace(metodo))
+        var respuesta = await servicioGenero.GetAsync(endpoint);
+        respuesta.EnsureSuccessStatusCode();
+        var resultado = await respuesta.Content.ReadAsStringAsync();
+
+        Console.WriteLine("Contenido de la respuesta: " + resultado);
+
+        var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        try
         {
-            throw new Exception("Error: La URL base o el método no están configurados correctamente.");
+            var resultadoDeserializado = JsonSerializer.Deserialize<GeneroResponse>(resultado, opciones);
+
+            if (resultadoDeserializado == null || resultadoDeserializado.generos == null)
+            {
+                Console.WriteLine("La respuesta deserializada es nula o no contiene generos.");
+                return new List<Genero>();
+            }
+
+            return resultadoDeserializado.generos;
         }
-
-        var client = _httpClientFactory.CreateClient("ServicioGenero");
-
-        // Agregamos el token al Header
-        var token = _configuracion.ObtenerMetodo("Token", "Bearer");
-        if (!string.IsNullOrEmpty(token))
+        catch (JsonException ex)
         {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Console.WriteLine("Error de deserialización: " + ex.Message);
+            return new List<Genero>();
         }
-
-        var urlCompleta = $"{urlBase}/{metodo}";
-        Console.WriteLine($"Realizando solicitud a: {urlCompleta}");
-
-        var response = await client.GetAsync(urlCompleta);
-        response.EnsureSuccessStatusCode();
-
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<List<Genero>>(content) ?? new List<Genero>();
     }
 }
