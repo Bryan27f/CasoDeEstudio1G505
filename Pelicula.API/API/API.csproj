@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Abstracciones\Abstracciones.csproj" />
+    <ProjectReference Include="..\BD\BD.sqlproj" />
     <ProjectReference Include="..\DA\DA.csproj" />
     <ProjectReference Include="..\Flujo\Flujo.csproj" />
     <ProjectReference Include="..\Reglas\Reglas.csproj" />
