@@ -2,6 +2,7 @@ using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Interfaces.Servicios;
 using Reglas;
+using Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,3 +47,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers(); // Mapeamos los controladores
 app.Run();
+
+builder.Services.AddScoped<TMDBService>();
