@@ -40,3 +40,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+
+
+builder.Services.AddControllers(); // Habilitamos los controladores
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers(); // Mapeamos los controladores
+app.Run();
